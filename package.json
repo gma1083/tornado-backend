@@ -1,0 +1,30 @@
+{
+  "name": "tornado-backend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha --recursive --timeout 50000",
+    "start": "nodemon app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gma1083/tornado-backend.git"
+  },
+  "author": "Gregory Arnheiter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gma1083/tornado-backend/issues"
+  },
+  "homepage": "https://github.com/gma1083/tornado-backend#readme",
+  "dependencies": {
+    "koa": "^2.11.0",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^7.4.0",
+    "noomman": "^0.5.1"
+  },
+  "devDependencies": {
+    "mocha": "^7.0.0"
+  }
+}

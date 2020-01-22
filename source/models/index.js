@@ -1,0 +1,17 @@
+const Address = require('./Address');
+const Contact = require('./Contact');
+const Company = require('./Company');
+const Client = require('./Client');
+const PAC = require('./PAC');
+const Person = require('./Person');
+const Role = require('./Role');
+const RoleDescription = require ('./RoleDescription');
+const Employee = require ('./Employee');
+const Transaction = require('./Transaction');
+const Job = require('./Job');
+const Budget = require('./Budget');
+const JobRate = require('./JobRate');
+const Rate = require('./Rate');
+const Invoice = require('./Invoice');
+const Timesheet = require('./Timesheet');
+const AddressType = require('./AddressType');
