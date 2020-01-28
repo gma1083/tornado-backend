@@ -2,7 +2,7 @@
   "name": "tornado-backend",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --recursive --timeout 50000",
     "start": "nodemon app.js",
@@ -19,12 +19,14 @@
   },
   "homepage": "https://github.com/gma1083/tornado-backend#readme",
   "dependencies": {
+    "@koa/cors": "^2.2.3",
     "koa": "^2.11.0",
+    "koa-body": "^4.1.1",
     "koa-logger": "^3.2.1",
     "koa-router": "^7.4.0",
-    "noomman": "^0.5.1"
+    "noomman": "^0.5.7"
   },
   "devDependencies": {
-    "mocha": "^7.0.0"
+    "mocha": "^7.0.1"
   }
 }

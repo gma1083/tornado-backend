@@ -3,6 +3,7 @@ const Person = require('../models/Person');
 const Contact = require('../models/Contact');
 const Address = require('../models/Address');
 const AddressType = require('../models/AddressType');
+const ClassModel = noomman.ClassModel;
 const Instance = noomman.Instance;
 const InstanceSet = noomman.InstanceSet;
 
@@ -10,19 +11,14 @@ async function findAll() {
     return Array.from(await Person.find({}));
 }
 
-
-
 async function newPersonAndContact(data) {
     const addressesData = data.addresses;
     const contactData = data.contact;
     const personData = data.person;
 
     const addresses = new InstanceSet(Address);
-
     for(const address in addressesData) {
-
         const tempAddressType = await AddressType.findOne({type : addressesData[address].addressType.type});
-
         if(addressesData[address].id) {
             const oldAddress = await Address.findById(addressesData[address].id);
             addressesData[address].addressType = tempAddressType;
@@ -56,7 +52,6 @@ async function newPersonAndContact(data) {
     
 }
 
-
 async function editPersonAndContact(personData) {
     if(personData._id) {
         const person = await Person.findById(personData._id);
@@ -70,11 +65,58 @@ async function editPersonAndContact(personData) {
     }  
 }
 
+function packageRequest(body) {
+    const data = {};
+    data.addresses = [];
 
+    const personData = body.person;
+    const contactData = body.contact;
+    const addressData = body.addresses;
+
+    const castedContactData = castAttributes('Contact', contactData);
+
+    for(address of addressData){
+        const castedAddressData = castAttributes('Address', address);
+        data.addresses.push(castedAddressData);
+    }
+    
+    data.person = personData;
+    data.contact = castedContactData;
+
+    return data;
+    
+}
+
+function castAttributes(className, data) {
+    const classModel = ClassModel.getClassModel(className);
+    const classAttributes = classModel.attributes;
+    const newData = {};
+    Object.assign(newData, data);
+
+    for(attribute of classAttributes) {
+        switch(attribute.type) {
+            case Number :
+                newData[attribute.name] ? newData[attribute.name] = Number(newData[attribute.name]) : newData[attribute.name] = null;
+                break;
+            case Date :
+                newData[attribute.name] ? newData[attribute.name] = Date(newData[attribute.name]) : newData[attribute.name] = null;
+                break;
+            case Boolean :
+                newData[attribute.name] ? newData[attribute.name] = Boolean(newData[attribute.name]) : newData[attribute.name] = null;
+                break;
+            default :
+                break;
+        }
+    }
+
+    return newData;
+}
 
 
 module.exports = {
     findAll,
     newPersonAndContact,
-    editPersonAndContact
+    editPersonAndContact,
+    castAttributes,
+    packageRequest,
 };

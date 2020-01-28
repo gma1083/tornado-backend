@@ -64,7 +64,7 @@ describe('Person Controller Tests:', () => {
             await Person.clear();
         });
         
-        it.only('newPersonAndAdress() - Saves New Person, Contact, and Address', async () => {
+        it('newPersonAndAdress() - Saves New Person, Contact, and Address', async () => {
 
             const personData = {
                 person : {
@@ -98,6 +98,30 @@ describe('Person Controller Tests:', () => {
             const foundAddress = await Address.findById(savedResult[2]._id);
 
             if(!foundPerson && !foundContact && !foundAddress) throw new Error('newPersonAndAddress Failed');
+
+
+        });
+
+    });
+
+    describe('Cody Showing Greg Some Stuff', () => {
+
+        it.only('First things first', async () => {
+
+            const addressData = {
+                    streetNumber : "1007",
+                    streetName : 'Spider Drive',
+                    city : 'Brookyln',
+                    state : 'NY',
+                    zip : "60035",
+                    country : 'USA',
+                    addressType : 
+                        {
+                            type : 'Home'
+                        }
+                };
+
+            const data = PersonController.castAttributes("Address", addressData);
 
 
         });
