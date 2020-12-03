@@ -36,9 +36,9 @@ async function newPersonAndContact(data) {
     }
 
     const contact = contactData.id ? await Contact.findById(contactData.id) : new Instance(Contact);
-    const person = personData.id ? await Person.findById(personData.id) : new Instance(Person); 
-
     contact.assign(contactData);
+
+    const person = personData.id ? await Person.findById(personData.id) : new Instance(Person); 
     person.assign(personData);
 
     contact.addresses = addresses;

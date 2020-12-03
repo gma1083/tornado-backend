@@ -27,4 +27,4 @@ app.use(async (ctx, next) => {
     ctx.app.emit('error', err, ctx);
     }
    });
-app.listen(8000);
+app.listen(process.env.PORT || 8000);

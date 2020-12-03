@@ -1,7 +1,9 @@
 const Address = require('../../source/models/Address');
+const Contact = require('../../source/models/Contact');
 const AddressType = require('../../source/models/AddressType');
 const Noomman = require('noomman');
 const Instance = Noomman.Instance;
+const InstanceSet = Noomman.InstanceSet;
 
 describe('Address.js Class Tests:', () => {
 
@@ -29,6 +31,10 @@ describe('Address.js Class Tests:', () => {
     });
 
     describe('Address Non Static Methods Tests:', () => {
+
+        beforeEach(async () => {
+            await Contact.clear();
+        });
 
         it('address.pretty() - Converts address to string with unit field', () => {
 
@@ -62,6 +68,59 @@ describe('Address.js Class Tests:', () => {
 
             const addressPretty = address.pretty();
             if(addressPretty !== '55 De Luca Place, San Rafael, CA, 94901, USA') throw new Error('Pretty did not convert address instance to proper string');
+
+        });
+
+        it('address.shouldDelete() - Contact contains that address', async () => {
+           
+            let shouldDelete = null;
+
+            const addressType = await AddressType.findOne({type : "Home"});
+
+            const address = new Instance(Address);
+            address.assign({
+                streetNumber : 1035,
+                streetName : "Rivera Street",
+                city :  "San Francisco",
+                state : "CA",
+                zip : 94116,
+                country : "TEST"
+            });
+            address.addressType = addressType;
+
+            const contact1 = new Instance(Contact);
+            contact1.assign({
+                email : 'greg1@contact.com',
+                primaryPhone : 1234567890
+            });
+
+            contact1.addresses = new InstanceSet(Address, [address]);
+            await address.save();
+            await contact1.save();
+
+           shouldDelete = await address.shouldDelete();
+           if(shouldDelete === null) throw new Error('address.shouldDelete() returned null');
+           if(shouldDelete === true) throw new Error('address.shouldDelete() should have returned false');
+
+        });
+
+        it('address.shouldDelete() - Contact doesnt contain that address', async () => {
+            let shouldDelete = null;
+
+            const address = new Instance(Address);
+            address.assign({
+                streetNumber : 1035,
+                streetName : "Rivera Street",
+                city :  "San Francisco",
+                state : "CA",
+                zip : 94116,
+                country : "TEST"
+            });
+
+           shouldDelete = await address.shouldDelete();
+
+           if(shouldDelete === null) throw new Error('address.shouldDelete() returned null');
+           if(shouldDelete === false) throw new Error('address.shouldDelete() should have returned true');
 
         });
 

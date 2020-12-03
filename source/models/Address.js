@@ -1,8 +1,11 @@
 
 
 const noomman = require('noomman');
+const Contact = require('./Contact');
+const Job = require('./Job');
 const ClassModel = noomman.ClassModel;
 const NoommanErrors = noomman.NoommanErrors;
+const InstanceSet = noomman.InstanceSet;
 
 const Address = new ClassModel({
     className : 'Address',
@@ -59,7 +62,8 @@ const Address = new ClassModel({
         },
     ],
     nonStaticMethods : {
-        pretty : pretty
+        pretty : pretty,
+        shouldDelete : shouldDelete
     }
 
 
@@ -69,5 +73,19 @@ function pretty() {
     if(this.unit) return this.streetNumber + ' ' + this.streetName + ' ' + this.unit + ', ' + this.city + ', ' + this.state + ', ' + this.zip + ', ' + this.country;
     else return this.streetNumber + ' ' + this.streetName + ', ' + this.city + ', ' + this.state + ', ' + this.zip + ', ' + this.country;
 }
+
+async function shouldDelete() {
+  
+    let shouldDelete = null;
+
+    const linkedJobs = await Job.find({address : this._id});
+    const foundContacts = await Contact.find({addresses : {$in : [this._id]} });
+    
+    if((!(linkedJobs.isEmpty())) ||  (!(foundContacts.isEmpty()))) shouldDelete = false;
+    else shouldDelete = true;
+
+    return shouldDelete;
+}
+
 
 module.exports = Address;

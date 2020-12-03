@@ -106,7 +106,7 @@ describe('Person Controller Tests:', () => {
 
     describe('Cody Showing Greg Some Stuff', () => {
 
-        it.only('First things first', async () => {
+        it('First things first', async () => {
 
             const addressData = {
                     streetNumber : "1007",
