@@ -12,7 +12,7 @@ const Transaction = new ClassModel({
         {
             name : 'amount',
             type : Number,
-            required : true,
+            required : false,
         },
         {
             name : 'referenceNumber',

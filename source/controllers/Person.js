@@ -30,7 +30,6 @@ async function newPersonAndContact(data) {
             addressesData[address].addressType = tempAddressType;
             newAddress.assign(addressesData[address]);
             addresses.add(newAddress);
-            newAddress.save();
         }
         
     }
@@ -44,10 +43,21 @@ async function newPersonAndContact(data) {
     contact.addresses = addresses;
     person.contact = contact;
 
+// Add await validation to each before saving - try catch there
+    await addresses.validate();
+    await contact.validate();
+    await person.validate();
+
+    await addresses.save();
     await contact.save();
     await person.save();
 
     const instances = [person, contact, addresses];
+    // const response = {
+    //     person : person.toDocument(),
+    //     contact : contact.toDocument(),
+    //     addresses
+    // }
     return instances;
     
 }

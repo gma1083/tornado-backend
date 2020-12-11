@@ -7,6 +7,11 @@ const Timesheet = new ClassModel({
     superClasses : [Transaction],
     attributes : [
         {
+            name : 'projectNumber',
+            type : Number,
+            required : true,
+        },
+        {
             name : 'crew',
             type : Number,
             required : true,
@@ -15,27 +20,33 @@ const Timesheet = new ClassModel({
             name : 'hours',
             type : Number,
             required : true,
-        },{
+        },
+        {
             name : 'lunch',
             type : Boolean,
             required : true,
-        },{
+        },
+        {
             name : 'finished',
             type : Boolean,
             required : true,
-        },{
+        },
+        {
             name : 'offHauled',
             type : Boolean,
             required : true,
-        },{
+        },
+        {
             name : 'yardsHauled',
             type : Number,
             required : true,
-        },{
+        },
+        {
             name : 'typeHauled',
             type : String,
             required : true,
-        },{
+        },
+        {
             name : 'notes',
             type : String,
             required : true,
