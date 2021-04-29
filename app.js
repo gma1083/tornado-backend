@@ -16,15 +16,18 @@ const app = new Koa();
 app.use(logger());
 app.use(cors());
 app.use(bodyParser);
-app.use(routes.routes());
-app.use(routes.allowedMethods());
 app.use(async (ctx, next) => {
     try {
         await next();
-    } catch (err) {
-    ctx.status = err.status || 500;
-    ctx.body = err.message;
-    ctx.app.emit('error', err, ctx);
+    } catch (error) {
+        ctx.status = error.status || 500;
+        ctx.body = {
+            error : error.message,
+            properties : error.properties
+        }
+        // ctx.app.emit('error', err, ctx);
     }
    });
+app.use(routes.routes());
+app.use(routes.allowedMethods());
 app.listen(process.env.PORT || 8000);

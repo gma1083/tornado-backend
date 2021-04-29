@@ -39,23 +39,23 @@ const Contact = new ClassModel({
     ],
     validations : [
         function() {
-            if(String(this.primaryPhone).length !== 10) throw new NoommanErrors.NoommanValidationError('Primary Phone Number Must Be Exactly 10 Digits');
+            if(String(this.primaryPhone).length !== 10) throw new NoommanErrors.NoommanValidationError('Primary Phone Number Must Be Exactly 10 Digits', ["primaryPhone"]);
         },
         function() {
             if(this.fax){
-                if(String(this.fax).length !== 10) throw new NoommanErrors.NoommanValidationError('Fax Number Must Be Exactly 10 Digits');
+                if(String(this.fax).length !== 10) throw new NoommanErrors.NoommanValidationError('Fax Number Must Be Exactly 10 Digits', ['fax']);
             }
             
         },
         function() {
             if(this.mobile) {
-                if(String(this.mobile).length !== 10) throw new NoommanErrors.NoommanValidationError('Mobile Phone Number Must Be Exactly 10 Digits');
+                if(String(this.mobile).length !== 10) throw new NoommanErrors.NoommanValidationError('Mobile Phone Number Must Be Exactly 10 Digits', ['mobilePhone']);
             }
             
         },
         function() {
             if (/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(this.email) == false) {
-                throw new NoommanErrors.NoommanValidationError('Invalid Email');
+                throw new NoommanErrors.NoommanValidationError('Invalid Email', ['email']);
             }
         }
     ]

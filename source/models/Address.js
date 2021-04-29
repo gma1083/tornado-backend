@@ -55,10 +55,10 @@ const Address = new ClassModel({
     ],
     validations : [
         function() {
-            if(String(this.zip).length !== 5) throw new NoommanErrors.NoommanValidationError('Zip code must be 5 characters only.');
+            if(String(this.zip).length !== 5) throw new NoommanErrors.NoommanValidationError('Zip code must be 5 characters only.', ['zip']);
         },
         function() {
-            if(this.state.length !== 2) throw new NoommanErrors.NoommanValidationError('State must be 2 characters only.');
+            if(this.state.length !== 2) throw new NoommanErrors.NoommanValidationError('State must be 2 characters only.', ['state']);
         },
     ],
     nonStaticMethods : {

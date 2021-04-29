@@ -1,9 +1,10 @@
 const noomman = require('noomman');
+const util = require('../utilities/util');
 const Person = require('../models/Person');
 const Contact = require('../models/Contact');
 const Address = require('../models/Address');
 const AddressType = require('../models/AddressType');
-const ClassModel = noomman.ClassModel;
+const { NoommanValidationError } = require('noomman/noomman/NoommanErrors');
 const Instance = noomman.Instance;
 const InstanceSet = noomman.InstanceSet;
 
@@ -44,9 +45,34 @@ async function newPersonAndContact(data) {
     person.contact = contact;
 
 // Add await validation to each before saving - try catch there
-    await addresses.validate();
-    await contact.validate();
-    await person.validate();
+    let errorProperties = [];
+    try{
+        await addresses.validate();
+    }
+    catch(error) {
+        errorProperties = errorProperties.concat(error.properties);
+        console.log(`Error Props: ${errorProperties}`);
+    }
+    try{
+        await contact.validate();
+    }
+    catch(error) {
+        console.log('ERROR CODY WANTS TO SEE: ' + error.message);
+        errorProperties = errorProperties.concat(error.properties);
+        console.log(`Error Props: ${errorProperties}`);
+    }
+    try{
+        await person.validate();
+    }
+    catch(error) {
+        errorProperties = errorProperties.concat(error.properties);
+        console.log(`Error Props: ${errorProperties}`);
+    }
+    console.log(`Error Props ${errorProperties.length}`);
+    if(errorProperties) {
+    
+        throw new NoommanValidationError("New Person Form Error", errorProperties);
+    }
 
     await addresses.save();
     await contact.save();
@@ -83,10 +109,10 @@ function packageRequest(body) {
     const contactData = body.contact;
     const addressData = body.addresses;
 
-    const castedContactData = castAttributes('Contact', contactData);
+    const castedContactData = util.castAttributes('Contact', contactData);
 
     for(address of addressData){
-        const castedAddressData = castAttributes('Address', address);
+        const castedAddressData = util.castAttributes('Address', address);
         data.addresses.push(castedAddressData);
     }
     
@@ -97,36 +123,9 @@ function packageRequest(body) {
     
 }
 
-function castAttributes(className, data) {
-    const classModel = ClassModel.getClassModel(className);
-    const classAttributes = classModel.attributes;
-    const newData = {};
-    Object.assign(newData, data);
-
-    for(attribute of classAttributes) {
-        switch(attribute.type) {
-            case Number :
-                newData[attribute.name] ? newData[attribute.name] = Number(newData[attribute.name]) : newData[attribute.name] = null;
-                break;
-            case Date :
-                newData[attribute.name] ? newData[attribute.name] = Date(newData[attribute.name]) : newData[attribute.name] = null;
-                break;
-            case Boolean :
-                newData[attribute.name] ? newData[attribute.name] = Boolean(newData[attribute.name]) : newData[attribute.name] = null;
-                break;
-            default :
-                break;
-        }
-    }
-
-    return newData;
-}
-
-
 module.exports = {
     findAll,
     newPersonAndContact,
     editPersonAndContact,
-    castAttributes,
     packageRequest,
 };

@@ -1,6 +1,6 @@
 const noomman = require('noomman');
+const util = require('../utilities/util');
 const Timesheet = require('../models/Timesheet');
-const ClassModel = noomman.ClassModel;
 const Instance = noomman.Instance;
 
 async function findAll() {
@@ -32,44 +32,43 @@ function packageRequest(body) {
     
     const data = {};
     const timesheetData = body.timesheet;
-    const castedTimesheetData = castAttributes('Timesheet', timesheetData);  
+    const castedTimesheetData = util.castAttributes('Timesheet', timesheetData);  
     data.timesheet = castedTimesheetData;
 
     return data;
     
 }
 
-function castAttributes(className, data) {
-    const classModel = ClassModel.getClassModel(className);
-    const classAttributes = classModel.attributes;
-    const newData = {};
+// function castAttributes(className, data) {
+//     const classModel = ClassModel.getClassModel(className);
+//     const classAttributes = classModel.attributes;
+//     const newData = {};
 
-    Object.assign(newData, data);
+//     Object.assign(newData, data);
 
-    for(attribute of classAttributes) {
-        switch(attribute.type) {
-            case Number :
-                newData[attribute.name] ? newData[attribute.name] = Number(newData[attribute.name]) : newData[attribute.name] = null;
-                break;
-            case Date :
-                newData[attribute.name] ? newData[attribute.name] = new Date(newData[attribute.name]) : newData[attribute.name] = null;
-                break;
-            case Boolean :
-                newData[attribute.name] ? newData[attribute.name] = Boolean(newData[attribute.name]) : newData[attribute.name] = null;
-                break;
-            default :
-                break;
-        }
-    }
+//     for(attribute of classAttributes) {
+//         switch(attribute.type) {
+//             case Number :
+//                 newData[attribute.name] ? newData[attribute.name] = Number(newData[attribute.name]) : newData[attribute.name] = null;
+//                 break;
+//             case Date :
+//                 newData[attribute.name] ? newData[attribute.name] = new Date(newData[attribute.name]) : newData[attribute.name] = null;
+//                 break;
+//             case Boolean :
+//                 newData[attribute.name] ? newData[attribute.name] = Boolean(newData[attribute.name]) : newData[attribute.name] = null;
+//                 break;
+//             default :
+//                 break;
+//         }
+//     }
 
-    return newData;
-}
+//     return newData;
+// }
 
 
 module.exports = {
     findAll,
     newTimesheet,
     editTimesheet,
-    castAttributes,
     packageRequest,
 };
