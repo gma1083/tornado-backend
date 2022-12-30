@@ -27,6 +27,6 @@
     "noomman": "^0.5.9"
   },
   "devDependencies": {
-    "mocha": "^7.2.0"
+    "mocha": "^10.2.0"
   }
 }
